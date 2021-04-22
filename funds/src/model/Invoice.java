@@ -34,7 +34,7 @@ public class Invoice {
 	 }
 	 
 	 // create a prepared statement
-	 String query = "insert into funds(`id`,`amount`,`research_id`,`date`,`cus_id`)" + " values (?, ?, ?, ?, ?)";
+	 String query = "insert into invoice(`id`,`amount`,`research_id`,`date`,`cus_id`)" + " values (?, ?, ?, ?, ?)";
 	 PreparedStatement preparedStmt = con.prepareStatement(query);
 	 
 	 // binding values
@@ -126,7 +126,7 @@ public class Invoice {
 		}
 			 		 
 		 // create a prepared statement
-		 String query = "UPDATE funds SET amount=?,research_id=?,date=?,cus_id=? WHERE id=?";
+		 String query = "UPDATE invoice SET amount=?,research_id=?,date=?,cus_id=? WHERE id=?";
 		 PreparedStatement preparedStmt = con.prepareStatement(query);
 		 
 		 // binding values
@@ -134,7 +134,7 @@ public class Invoice {
 		 preparedStmt.setString(2, research_id);
 		 preparedStmt.setString(3, date);
 		 preparedStmt.setString(4, cus_id);
-		 preparedStmt.setInt(6, Integer.parseInt(id));
+		 preparedStmt.setInt(5, Integer.parseInt(id));
 		 
 		 // execute the statement
 		 preparedStmt.execute();
@@ -161,7 +161,7 @@ public class Invoice {
 		 
 	 }
 	 // create a prepared statement
-	 String query = "delete from funds where id=?";
+	 String query = "delete from invoice where id=?";
 	 PreparedStatement preparedStmt = con.prepareStatement(query);
 	 
 	 // binding values
