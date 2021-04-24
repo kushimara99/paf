@@ -8,21 +8,8 @@ import java.sql.ResultSet;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-public class Research {
-	private Connection connect()
-	{
-		Connection con = null;
-		try
-		{
-			Class.forName("com.mysql.cj.jdbc.Driver");
+public class Research extends DbConnection {
 
-			//Provide the correct details: DBServer/DBName, username, password
-			con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/research-service", "root", "root");
-		}
-		catch (Exception e)
-		{e.printStackTrace();}
-		return con;
-	} 
 
 	//Read Research
 	public JsonObject getResearch() {
@@ -38,10 +25,10 @@ public class Research {
 			}
 
 
-			// create a prepared statement
+			// sql query
 			String query = " select * from research";
 
-
+			// create a prepared statement
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			ResultSet rs = preparedStmt.executeQuery();
 			
@@ -55,7 +42,7 @@ public class Research {
 				jsonRow.addProperty("category", rs.getString("category") );
 				jsonRow.addProperty("expected_budget", rs.getDouble("expected_budget") );
 				resultArray.add(jsonRow);
-				//System.out.println(jsonRow.toString());
+				
 			}
 			result = new JsonObject();
 			result.add("research", resultArray);
@@ -86,12 +73,12 @@ public class Research {
 			}
 
 
-			// create a prepared statement
+			// sql query
 			String query = " insert into research"+
 					"(`researcher_id`,`research_name`,`description`,`category`,`expected_budget`)"
 					+ " values (?, ?, ?, ?, ?)";
 
-
+			// create a prepared statement
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 
 
@@ -101,8 +88,8 @@ public class Research {
 			preparedStmt.setString(3, description);
 			preparedStmt.setString(4, category);
 			preparedStmt.setDouble(5,budget);
+			
 			// execute the statement
-
 			preparedStmt.execute();
 			con.close();
 			
@@ -133,10 +120,10 @@ public class Research {
 			}
 
 
-			// create a prepared statement
+			//sql query
 			String query = "UPDATE research SET researcher_id=?,research_name=?,description=?,category=?,expected_budget=? WHERE research_id=?";
 
-
+			// create a prepared statement
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 
 
@@ -149,11 +136,17 @@ public class Research {
 			preparedStmt.setInt(6, research_id);
 			
 			// execute the statement
-			preparedStmt.execute();
+			int status = preparedStmt.executeUpdate();
 			con.close();
 			
 			result = new JsonObject();
-			result.addProperty("SUCCESSFUL", "Updated successfully");
+			if(status > 0) {
+				result.addProperty("SUCCESSFUL", "Updated successfully");
+				
+			}else {
+				result.addProperty("UNSUCCESSFUL", "Updated failed");
+			}
+				
 		}
 		catch (Exception e)
 		{
@@ -163,6 +156,8 @@ public class Research {
 		}
 		return result;
 	} 
+	
+	
 	
 	//delete research
 	public JsonObject deleteResearch( int research_id )
@@ -179,27 +174,28 @@ public class Research {
 			}
 
 
-			// create a prepared statement
+			// sql query
 			String query = "delete from research where research_id=?";
 					 
-
+			// create a prepared statement
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 
 
 			// binding values
 			preparedStmt.setInt(1, research_id);
-//			preparedStmt.setString(2, name);
-//			preparedStmt.setString(3, description);
-//			preparedStmt.setString(4, category);
-//			preparedStmt.setDouble(5,budget);
-//			preparedStmt.setInt(6, research_id);
+
 			
 			// execute the statement
-			preparedStmt.execute();
+			int status = preparedStmt.executeUpdate();
 			con.close();
 			
 			result = new JsonObject();
-			result.addProperty("SUCCESSFUL", "Deleted successfully");
+			if(status > 0) {
+				result.addProperty("SUCCESSFUL", "Deleted successfully");
+				
+			}else {
+				result.addProperty("UNSUCCESSFUL", "Delete failed");
+			}
 		}
 		catch (Exception e)
 		{
@@ -211,7 +207,7 @@ public class Research {
 	} 
 	
 	
-	//get single record
+	//get a single record
 	public JsonObject getsingleResearch(int research_id) {
 		JsonObject result = null;
 		try
@@ -225,10 +221,10 @@ public class Research {
 			}
 
 
-			// create a prepared statement
+			//sql query
 			String query = " select * from research where research_id=?";
 
-
+			// create a prepared statement
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			
 			preparedStmt.setInt(1, research_id);
@@ -244,7 +240,7 @@ public class Research {
 				jsonRow.addProperty("category", rs.getString("category") );
 				jsonRow.addProperty("expected_budget", rs.getDouble("expected_budget") );
 				resultArray.add(jsonRow);
-				//System.out.println(jsonRow.toString());
+				
 			}
 			result = new JsonObject();
 			result.add("research", resultArray);
