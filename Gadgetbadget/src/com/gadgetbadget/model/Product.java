@@ -213,7 +213,7 @@ public class Product {
 
 
   			// create a prepared statement
-  			String query = "delete from product where product_id=?";
+  			String query = "delete from product where id=?";
   					 
 
   			PreparedStatement preparedStmt = con.prepareStatement(query);
