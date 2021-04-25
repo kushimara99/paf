@@ -32,6 +32,7 @@ public class Research extends DbConnection {
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			ResultSet rs = preparedStmt.executeQuery();
 			
+			//binding values
 			JsonArray resultArray = new JsonArray();
 			while(rs.next()) {
 				JsonObject jsonRow = new JsonObject();
@@ -230,6 +231,7 @@ public class Research extends DbConnection {
 			preparedStmt.setInt(1, research_id);
 			ResultSet rs = preparedStmt.executeQuery();
 			
+			// binding values
 			JsonArray resultArray = new JsonArray();
 			while(rs.next()) {
 				JsonObject jsonRow = new JsonObject();

@@ -19,6 +19,7 @@ import com.research.model.Research;
 public class ResearchResource {
 	Research research = new Research();
 
+	//GET method
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -31,6 +32,7 @@ public class ResearchResource {
 	}
 
 
+	//POST method
 	@POST
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -41,6 +43,7 @@ public class ResearchResource {
 		return (research.insertResearch(researchJson.get("researcher_id").getAsInt(), researchJson.get("research_name").getAsString(), researchJson.get("description").getAsString(), researchJson.get("category").getAsString(), researchJson.get("expected_budget").getAsDouble())).toString();
 	}
 
+	//UPDATE method
 	@PUT
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -51,6 +54,7 @@ public class ResearchResource {
 		return (research.updateResearch(researchJson.get("research_id").getAsInt(),researchJson.get("researcher_id").getAsInt(), researchJson.get("research_name").getAsString(), researchJson.get("description").getAsString(), researchJson.get("category").getAsString(), researchJson.get("expected_budget").getAsDouble())).toString();
 	}
 
+	//DELETE method
 	@DELETE
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
